@@ -71,6 +71,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
@@ -167,21 +169,43 @@ module.exports = function (webpackEnv) {
       },
     ].filter(Boolean);
     if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
-          options: {
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
-          },
+      // 这里判断less-loader加上inline js enabled
+      const customedLoader = require.resolve(preProcessor);
+      const resolveUrlLoader = {
+        loader: require.resolve('resolve-url-loader'),
+        options: {
+          sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+          root: paths.appSrc,
         },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
-        }
-      );
+      };
+
+      if(preProcessor === 'less-loader') {
+        loaders.push(
+          resolveUrlLoader,
+          {
+            loader: customedLoader,
+            options: {
+              sourceMap: true,
+              lessOptions: {
+                javascriptEnabled: true,
+                modifyVars: {
+                  '@primary-color': '#1DA57A'
+                }
+              }
+            },
+          }
+        )
+      } else {
+        loaders.push(
+          resolveUrlLoader, 
+          {
+            loader: customedLoader,
+            options: {
+              sourceMap: true,
+            },
+          }
+        );
+      }
     }
     return loaders;
   };
@@ -539,6 +563,39 @@ module.exports = function (webpackEnv) {
                   },
                 },
                 'sass-loader'
+              ),
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                  modules: {
+                    mode: 'icss'
+                  },
+                },
+                'less-loader'
+              ),
+              sideEffects: true
+            },
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                  modules: {
+                    mode: 'local',
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                'less-loader'
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.

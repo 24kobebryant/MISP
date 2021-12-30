@@ -1,0 +1,54 @@
+@boxPadding: 24px;
+@listPadding: 16px;
+@boxBorderRadius: 5px;
+@boxGapPadding: 10px;
+
+.wrapper {
+  display: grid;
+  // 把整个wrapper 分为8个column, 不算gap等
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: 100%;
+  
+  background: #fff;
+  height: 100%;
+
+  .treeSelect,
+  .listPage {
+    background: #fff;
+    padding: @boxPadding;
+    border-radius: @boxBorderRadius;
+    box-sizing: border-box;
+
+    /* for alert message tooltip position */
+    position: relative;
+  }
+
+  .treeSelect {
+    grid-column: 1 / 3;
+    
+    border-right: 2px solid rgb(247, 241, 241);
+  }
+
+  .listPage {
+    grid-column: 3 / 9;
+
+    .filter,
+    .list {
+      padding: @listPadding
+    }
+
+    .list {
+      height: 60%;
+      
+      .ant-pagination {
+        float: right;
+      }
+    }
+  }
+
+}
+
+.ant-modal-content
+.ant-modal-confirm-btns {
+  margin-top: 5px;
+}

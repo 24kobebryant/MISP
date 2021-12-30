@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/compatible": "^1.1.0",
     "@babel/core": "^7.16.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
@@ -13,8 +14,11 @@
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "antd": "^4.17.4",
+    "axios": "^0.24.0",
     "babel-jest": "^27.4.2",
     "babel-loader": "^8.2.3",
+    "babel-plugin-import": "^1.13.3",
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.0.1",
     "bfj": "^7.0.2",
@@ -25,6 +29,7 @@
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "enquire-js": "^0.2.1",
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-webpack-plugin": "^3.1.1",
@@ -42,11 +47,17 @@
     "postcss-normalize": "^10.0.1",
     "postcss-preset-env": "^7.0.1",
     "prompts": "^2.4.2",
+    "rc-banner-anim": "^2.4.5",
+    "rc-queue-anim": "^2.0.0",
+    "rc-scroll-anim": "^2.7.6",
+    "rc-tween-one": "^3.0.3",
     "react": "^17.0.2",
     "react-app-polyfill": "^3.0.0",
     "react-dev-utils": "^12.0.0",
     "react-dom": "^17.0.2",
     "react-refresh": "^0.11.0",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^12.3.0",
@@ -139,6 +150,20 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "libraryDirectory": "es",
+          "style": "css"
+        }
+      ]
     ]
+  },
+  "devDependencies": {
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0"
   }
 }
